@@ -63,7 +63,9 @@ function paginateCards(arr, page_size, page_number) {
 }
 
 function cleanBoard() {
-  document.querySelector(".cards").innerHTML = "";
+  document
+    .querySelectorAll(".card")
+    .forEach((card) => card.parentNode.removeChild(card));
 }
 
 function showCards(cards) {
@@ -91,9 +93,8 @@ function addCardToDeck(card) {
       return false;
     }
     same.dataset.count = (parseInt(same.dataset.count) + 1).toString();
-    const counter = same.parentNode.lastChild;
+    const counter = same.lastChild;
     counter.textContent = same.dataset.count;
-    counter.classList.add("inline");
   } else {
     createCardInDeck(card);
   }
@@ -103,34 +104,40 @@ function createCardInDeck(card) {
   const cardTileWrapper = document.createElement("div");
   cardTileWrapper.classList.add("tile-wrapper");
 
-  const cardTile = document.createElement("div");
-  cardTile.classList.add("tile");
-  cardTile.setAttribute(
-    "style",
-    `background-image: url('${card.tile_url}');
-       background-size: contain;
-       background-repeat: no-repeat;
-       background-position: right;
-      `
-  );
-  cardTile.dataset.cardId = card.id;
-  cardTile.dataset.count = 1;
-  const manaCost = document.createElement("div");
-  manaCost.textContent = card.cost;
-  manaCost.classList.add("mana-cost");
+  const tileRow = document.createElement("div");
+  tileRow.classList.add("tile");
+  tileRow.dataset.cardId = card.id;
+  tileRow.dataset.count = "1";
 
-  const cardTitle = document.createElement("p");
-  cardTitle.textContent = card.name;
-  cardTitle.classList.add("card__title");
+  const tileCost = document.createElement("span");
+  tileCost.textContent = card.cost;
+  tileCost.classList.add("tile__cost");
 
-  const cardCounter = document.createElement("p");
-  cardCounter.textContent = 1;
-  cardCounter.classList.add("card__counter");
+  const tileName = document.createElement("span");
+  tileName.textContent = card.name;
+  tileName.classList.add("tile__title");
 
-  cardTile.append(manaCost);
-  cardTile.append(cardTitle);
-  cardTileWrapper.append(cardTile);
-  cardTileWrapper.append(cardCounter);
+  const tileFill = document.createElement("div");
+  tileFill.classList.add("tile__fill");
+
+  const tileImg = document.createElement("div");
+  tileImg.classList.add("tile__image");
+  tileImg.setAttribute("style", `background-image: url("${card.tile_url}")`);
+
+  const tileImgMask = document.createElement("div");
+  tileImgMask.classList.add("tile__image--mask");
+
+  const tileCounter = document.createElement("span");
+  tileCounter.textContent = "1";
+  tileCounter.classList.add("tile__counter");
+
+  tileRow.append(tileCost);
+  tileRow.append(tileName);
+  tileRow.append(tileFill);
+  tileRow.append(tileImg);
+  tileRow.append(tileImgMask);
+  tileRow.append(tileCounter);
+  cardTileWrapper.append(tileRow);
   document.querySelector(".deck-list").append(cardTileWrapper);
 }
 
