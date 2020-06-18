@@ -6,9 +6,13 @@
 
 html,
 body {
-  background-color: #161616;
   width: 100%;
   height: 100%;
+}
+
+body {
+  font-family: "Open Sans Condensed", sans-serif;
+  background: url("../assets/main-bg.jpg") 50% #f1d4ab;
 }
 
 .app {
@@ -18,25 +22,87 @@ body {
 .board {
   display: flex;
   flex-flow: row nowrap;
-  min-height: 80%;
+  min-height: 60%;
 }
 
-.deck {
-  min-width: 300px;
-  background-color: slateblue;
+.deck-container {
+  position: relative;
+  opacity: 1;
+  width: 407px;
+  top: auto;
+  right: auto;
+  z-index: 5;
+  min-height: 570px;
+  background: url("../assets/deck-bg.png") center top / cover no-repeat;
+  border-radius: 25px;
+  transition: all 0.15s ease-out 0s;
+  transform: translate3d(0px, 40px, 0px);
+  display: block;
 }
 
-.deck:hover {
-  box-shadow: 0px 0px 30px #5472c7;
+.deck-container:hover {
+  box-shadow: 0 0 30px #5472c7;
   -moz-transition: all 0.2s ease-in;
   -o-transition: all 0.2s ease-in;
   -webkit-transition: all 0.2s ease-in;
   transition: all 0.2s ease-in;
 }
 
+.deck-header {
+  display: block;
+  position: relative;
+  height: 0;
+  padding-bottom: 34.975%;
+  background: url("../assets/deck-header.png") center top / cover no-repeat;
+}
+
+.deck-list {
+  width: 100%;
+  margin-bottom: -10px;
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  background: url("../assets/deck-list-scrollbar.png") center center / 100%
+    repeat-y;
+  overflow: hidden;
+  padding: 0 30px;
+}
+
+.deck-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  align-content: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  height: 0;
+  z-index: 201;
+  position: absolute;
+  bottom: 0;
+  font-size: 16px !important;
+  padding: 110px 30px 0;
+  background: url("../assets/deck-footer.png") center bottom / 100% 110px
+    no-repeat;
+}
+
 .cards {
   display: flex;
   flex-flow: row wrap;
+  max-width: calc(95% - 370px);
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.next-arrow {
+  position: absolute;
+}
+
+.prev-arrow {
+  position: absolute;
 }
 
 .tile-wrapper {
@@ -65,7 +131,7 @@ body {
 
 .card__title {
   display: inline;
-  margin: 0 20px;
+  margin-left: 10px;
   font-size: 20px;
   font-weight: bold;
   color: white;
@@ -82,6 +148,7 @@ body {
   font-weight: bold;
   color: darkgoldenrod;
   -webkit-text-stroke: 1px rgb(43, 27, 13);
+  border-radius: 10px;
 }
 
 .inline {
@@ -91,24 +158,6 @@ body {
 .tile {
   flex-grow: 1;
   border-radius: 10px;
-}
-
-.paper {
-  width: 100%;
-  background-color: #f8f5de;
-  background-image: linear-gradient(
-    to right,
-    rgba(255, 210, 0, 0.4),
-    rgba(200, 160, 0, 0.1) 11%,
-    rgba(0, 0, 0, 0) 35%,
-    rgba(200, 160, 0, 0.1) 65%
-  );
-  box-shadow: inset 0 0 75px rgba(255, 210, 0, 0.3),
-    inset 0 0 20px rgba(255, 210, 0, 0.4), inset 0 0 30px rgba(220, 120, 0, 0.8);
-  color: rgba(0, 0, 0, 0.5);
-  letter-spacing: 0.05em;
-  line-height: 1.8;
-  padding: 5em 10em 15em 5em;
 }
 
 .caps {
@@ -124,9 +173,38 @@ body {
 select:required:invalid {
   color: gray;
 }
+
 option[value=""][disabled] {
   display: none;
 }
+
 option {
   color: black;
+}
+
+a.arrow {
+  background-image: url("../assets/arrows.png");
+  position: absolute;
+  height: 34px;
+  width: 38px;
+  top: 50%;
+  margin-top: -17px;
+  opacity: 0.5;
+  cursor: pointer;
+  -webkit-transition: 0.15s, opacity, linear;
+  -moz-transition: 0.15s, opacity, linear;
+  transition: 0.15s, opacity, linear;
+}
+
+a.arrow:hover {
+  opacity: 1;
+}
+
+a.back-arrow {
+  left: 5px;
+}
+
+a.forward-arrow {
+  right: 5px;
+  background-position: -38px 0;
 }

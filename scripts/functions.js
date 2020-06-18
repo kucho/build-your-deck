@@ -1,34 +1,19 @@
-const HEADERS = {
-  method: "GET",
-  headers: {
-    "x-rapidapi-host": "omgvamp-hearthstone-v1.p.rapidapi.com",
-    "x-rapidapi-key": "0a9e2655femsh7c424f04a0b3378p163931jsn4bb6f27395ac",
-  },
-};
-
 const MAX_CARDS_PER_DECK = 3;
 
 let CARD_STORE = {};
 let LANG = "enUS";
 
-async function getInfo() {
-  try {
-    const response = await fetch(
-      "https://omgvamp-hearthstone-v1.p.rapidapi.com/info",
-      HEADERS
-    );
-    return response.json();
-  } catch (err) {
-    console.log(err);
-  }
-}
+String.prototype.capitalize = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+};
 
 function updateClassesPicker(classes) {
   const select = document.querySelector("#select-class");
   classes.forEach((el) => {
     const opt = document.createElement("option");
-    opt.textContent = el;
-    opt.value = el.toUpperCase();
+    console.log(el.capitalize());
+    opt.textContent = el.capitalize();
+    opt.value = el;
     select.append(opt);
   });
 }
@@ -49,20 +34,17 @@ function groupBy(arr, criteria) {
   }, {});
 }
 
-async function updateStore() {
-  console.log(`Fetching cards...`);
-  const cards = await getAllCards();
-  // Insert image links to objects
-  cards.forEach((card) => {
+async function updateStore(lang) {
+  const cards = await getAllCards(lang);
+  for (const card of cards) {
     card[
       "image_url"
     ] = `https://art.hearthstonejson.com/v1/render/latest/${LANG}/256x/${card.id}.png`;
     card[
       "tile_url"
     ] = `https://art.hearthstonejson.com/v1/tiles/${card.id}.jpg`;
-  });
+  }
   CARD_STORE = groupBy(cards, "cardClass");
-  console.log("Got it, boss!");
 }
 
 async function getAllCards(lang = "enUS") {
@@ -104,11 +86,11 @@ function addCardToDeck(card) {
   const same = document.querySelector(`[data-card-id=${card.id}]`);
   console.log(same);
   if (same) {
-    if (same.dataset.count == MAX_CARDS_PER_DECK) {
+    if (parseInt(same.dataset.count) === MAX_CARDS_PER_DECK) {
       alert("You can't add more of this!");
       return false;
     }
-    same.dataset.count = parseInt(same.dataset.count) + 1;
+    same.dataset.count = (parseInt(same.dataset.count) + 1).toString();
     const counter = same.parentNode.lastChild;
     counter.textContent = same.dataset.count;
     counter.classList.add("inline");
@@ -149,12 +131,10 @@ function createCardInDeck(card) {
   cardTile.append(cardTitle);
   cardTileWrapper.append(cardTile);
   cardTileWrapper.append(cardCounter);
-  document.querySelector(".deck").append(cardTileWrapper);
+  document.querySelector(".deck-list").append(cardTileWrapper);
 }
 
 function init() {
-  updateStore().then(console.log);
-  getInfo().then((data) => updateClassesPicker(data.classes));
   const select = document.querySelector("#select-class");
   select.addEventListener("change", function () {
     cleanBoard();
@@ -162,5 +142,10 @@ function init() {
     showCards(cards);
   });
 }
+
+updateStore(LANG).then(() => {
+  console.log("Store updated!");
+  updateClassesPicker(Object.keys(CARD_STORE));
+});
 
 window.onload = () => init();

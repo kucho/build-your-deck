@@ -5,20 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pick your deck!</title>
     <link rel="stylesheet" href="stylesheets/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:ital,wght@0,300;0,700;1,300&display=swap"
+      rel="stylesheet"
+    />
     <script src="./scripts/functions.js"></script>
     <script src="https://sunwell.hearthsim.net/branches/master/sunwell.cdn.min.js"></script>
   </head>
   <body>
     <div class="app">
       <h1>Build your deck!</h1>
-      1. Select a class
+      <label for="select-class">1. Select a class</label>
       <select name="select-class" id="select-class" required>
         <option value="" disabled selected>Select a class</option>
       </select>
       <header class="type-name">Cards category</header>
       <div class="board">
-        <div class="cards paper"></div>
-        <div class="deck"></div>
+        <div class="cards">
+          <a class="arrow forward-arrow"></a>
+          <a class="arrow back-arrow"></a>
+        </div>
+        <div class="deck-container">
+          <div class="deck-header"></div>
+          <div class="deck-list"></div>
+          <p>
+            Click cards to add them or paste a deck code
+          </p>
+          <div class="deck-footer"></div>
+        </div>
       </div>
     </div>
   </body>
